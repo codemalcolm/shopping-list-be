@@ -26,3 +26,5 @@ const ShoppingListSchema = new mongoose.Schema({
         default:false
     }
 })
+
+module.exports = mongoose.model("ShoppingList", ShoppingListSchema)
