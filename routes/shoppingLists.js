@@ -1,30 +1,11 @@
 const express = require("express")
 const router = express.Router()
 
-// getting controllers from "controllers/shoppingLists"
-
-
-// //shoppinglists
-// router.route("/").post()         // shoppinglist/create in uuDocs
-// router.route("/").get()          // shoppinglist/get in uuDocs
-// router.route("/:id").put()      // shoppinglist/edit in uuDocs
-// router.route("/:id").delete()   // shoppinglist/delete in uuDocs
-
-// // items
-// router.route("/item").post()        // shoppinglist/item/create in uuDocs
-// router.route("/item").get()         // shoppinglist/item/get in uuDocs
-// router.route("/item/:id").put()     // shoppinglist/item/edit in uuDocs
-// router.route("/item/:id").delete()  // shoppinglist/item/delete in uuDocs
-
-// // archived
-// router.route("/archived").post()        // shoppinglist/archived/create in uuDocs
-// router.route("/archived").get()         // shoppinglist/archived/get in uuDocs
-// router.route("/archived/:id").delete()  // shoppinglist/archived/delete in uuDocs
-
-// // inviteUser
-// router.route("/:id/inviteUser/:id").post()  // shoppinglist/:id/inviteUser/post in uuDocs
-
-const {createShoppingList, getAllShoppingLists} = require("../controllers/shoppingLists")
+// controllers
+const {createShoppingList, getAllShoppingLists, editShoppingList, deleteShoppingList, getSingleShoppingList} = require("../controllers/shoppingLists")
+const {createItem, getItems, editItem, deleteItem} = require("../controllers/items")
+const {createArchivedItem, getArchivedItems, deleteArchivedItem} = require("../controllers/archived")
+const {inviteUser} = require("../controllers/inviteUser")
 
 // Shopping lists
 router.route("/")
@@ -32,28 +13,30 @@ router.route("/")
   .get(getAllShoppingLists); // shopppinglist/get in uuDocs
 
 router.route("/:id")
-  .put((req, res) => res.send(`You are visiting the shoppinglist/edit route with ID: ${req.params.id}`))
-  .delete((req, res) => res.send(`You are visiting the shoppinglist/delete route with ID: ${req.params.id}`));
+  .get(getSingleShoppingList)
+  .put(editShoppingList) // shoppinglist/edit in uuDocs
+  .delete(deleteShoppingList); // shoppinglist/delete in uuDocs
 
 // Items
 router.route("/item")
-  .post((req, res) => res.send("You are visiting the shoppinglist/item/create route"))
-  .get((req, res) => res.send("You are visiting the shoppinglist/item/get route"));
+  .post(createItem) // shoppinglist/item/create in uuDocs
+  .get(getItems); // shoppinglist/item/get in uuDocs
 
 router.route("/item/:id")
-  .put((req, res) => res.send(`You are visiting the shoppinglist/item/edit route with ID: ${req.params.id}`))
-  .delete((req, res) => res.send(`You are visiting the shoppinglist/item/delete route with ID: ${req.params.id}`));
+  .put(editItem)  // shoppinglist/item/edit in uuDocs
+  .delete(deleteItem); // shoppinglist/item/delete in uuDocs
 
 // Archived
 router.route("/archived")
-  .post((req, res) => res.send("You are visiting the shoppinglist/archived/create route"))
-  .get((req, res) => res.send("You are visiting the shoppinglist/archived/get route"));
+  .post(createArchivedItem)  // shoppinglist/archived/create in uuDocs
+  .get(getArchivedItems); // shoppinglist/archived/get in uuDocs
 
 router.route("/archived/:id")
-  .delete((req, res) => res.send(`You are visiting the shoppinglist/archived/delete route with ID: ${req.params.id}`));
+  .delete(deleteArchivedItem); // shoppinglist/archived/delete in uuDocs
 
 // Invite User
-router.route("/:id/inviteUser/:userId")
-  .post((req, res) => res.send(`You are visiting the shoppinglist/:id/inviteUser/post route for ShoppingList ID: ${req.params.id} and User ID: ${req.params.userId}`));
+router.route("/:id/inviteUser/:userId") // shoppinglist/:id/inviteUser/post in uuDocs
+  .post(inviteUser)
+  
 
 module.exports = router
