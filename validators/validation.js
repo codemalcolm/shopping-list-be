@@ -1,4 +1,4 @@
-const Joi = require("join")
+const Joi = require("joi")
 
 // API layer validation for shoppingListItem
 const shoppingListItemValidationSchema = Joi.object({
@@ -25,3 +25,5 @@ const shoppingListValidationSchema = Joi.object({
     isDone: Joi.boolean().default(false),
     isArchived: Joi.boolean().default(false),
 });
+
+module.exports = {shoppingListItemValidationSchema, shoppingListValidationSchema}
