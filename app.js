@@ -4,6 +4,9 @@ const shoppingLists = require("./routes/shoppingLists")
 
 const port = 3000;
 
+
+app.use(express.json()); // Parse JSON bodies
+
 app.get("/", (req, res)=> {
     res.send("Hello World")
 })

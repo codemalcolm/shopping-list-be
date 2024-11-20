@@ -24,10 +24,12 @@ const router = express.Router()
 // // inviteUser
 // router.route("/:id/inviteUser/:id").post()  // shoppinglist/:id/inviteUser/post in uuDocs
 
+const {createShoppingList, getAllShoppingLists} = require("../controllers/shoppingLists")
+
 // Shopping lists
 router.route("/")
-  .post((req, res) => res.send("You are visiting the shoppinglist/create route"))
-  .get((req, res) => res.send("You are visiting the shoppinglist/get route"));
+  .post(createShoppingList) // shopppinglist/create in uuDocs
+  .get(getAllShoppingLists); // shopppinglist/get in uuDocs
 
 router.route("/:id")
   .put((req, res) => res.send(`You are visiting the shoppinglist/edit route with ID: ${req.params.id}`))
