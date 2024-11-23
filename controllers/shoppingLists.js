@@ -244,6 +244,7 @@ const createShoppingList = asyncWrapper(async (req, res) => {
 	}));
 
 	const shoppingList = {
+        id: `shoppingListId${Math.floor(Math.random() * 1000)}`,
 		name,
 		state: "active", // Default value
 		owner,
@@ -261,7 +262,12 @@ const createShoppingList = asyncWrapper(async (req, res) => {
 
 const getAllShoppingLists = asyncWrapper(async (req, res) => {
 	const shoppingLists = shoppingListsMock;
-	res.status(201).json(shoppingLists);
+	res
+		.status(201)
+		.json({
+			message: "Shopping list updated successfully.",
+			fetchedLists: shoppingLists,
+		});
 });
 
 const editShoppingList = asyncWrapper(async (req, res) => {
@@ -304,12 +310,10 @@ const getSingleShoppingList = asyncWrapper(async (req, res) => {
 		? res
 				.status(404)
 				.json({ message: "Shopping list not found", requestedId: listId })
-		: res
-				.status(201)
-				.json({
-					message: "Shopping list fetched successfully",
-					fetchedDocument: singleList,
-				});
+		: res.status(201).json({
+				message: "Shopping list fetched successfully",
+				fetchedDocument: singleList,
+		  });
 });
 
 module.exports = {
