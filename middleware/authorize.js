@@ -25,7 +25,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId2",
 		name: "Party Supplies",
-		state: "inactive",
+		state: "archived",
 		owner: "userId201",
 		memberList: ["userId202", "userId203"],
 		itemList: [
@@ -94,7 +94,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId5",
 		name: "Camping Trip",
-		state: "inactive",
+		state: "archived",
 		owner: "userId501",
 		memberList: ["userId502", "userId503"],
 		itemList: [
@@ -186,7 +186,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId9",
 		name: "Office Supplies",
-		state: "inactive",
+		state: "archived",
 		owner: "userId901",
 		memberList: ["userId902"],
 		itemList: [
@@ -256,39 +256,55 @@ const authorizeOwner = (req, res, next) => {
 	next();
 };
 
-const authorizeAccess = (req, res, next) => {
-  const userId = "userId102"; // Mock user ID for now
-  let { shoppingListId } = req.params;
+const authorizeOwnerArchived = (req, res, next) => {
+	const userId = "userId1001"; // Mocking id for simplification (JWT token would be accessed here)
+	if (!userId) {
+		return res.status(403).json({
+			error: "Authorization Error",
+			message: "You are not authorized to perform this action.",
+		});
+	}
 
-  // if shoppingListId is undefined that means that the shoppinglist/:id is being used instead 
-  if(shoppingListId === undefined){
-    shoppingListId = req.params.id; // so we change it here
-  }
-
-  // Find the shopping list by ID
-  const shoppingList = shoppingListsMock.find((list) => list.id === shoppingListId);
-
-  // If shopping list doesn't exist
-  if (!shoppingList) {
-    return res.status(404).json({
-      message: "Shopping list not found",
-      requestedId: shoppingListId,
-    });
-  }
-
-  // Check if the user has permission to access the shopping list
-  if (
-    shoppingList.owner !== userId &&
-    !shoppingList.memberList.includes(userId)
-  ) {
-    return res.status(403).json({
-      error: "Authorization Error",
-      message: "You are not authorized to perform this action.",
-    });
-  }
-
-  req.shoppingList = shoppingList; // Pass the shopping list to the next middleware
-  next();
+	// Attach the user's ID to the request object
+	req.user = { id: userId };
+	next();
 };
 
-module.exports = { authorizeOwner, authorizeAccess };
+const authorizeAccess = (req, res, next) => {
+	const userId = "userId102"; // Mock user ID for now
+	let { shoppingListId } = req.params;
+
+	// if shoppingListId is undefined that means that the shoppinglist/:id is being used instead
+	if (shoppingListId === undefined) {
+		shoppingListId = req.params.id; // so we change it here
+	}
+
+	// Find the shopping list by ID
+	const shoppingList = shoppingListsMock.find(
+		(list) => list.id === shoppingListId
+	);
+
+	// If shopping list doesn't exist
+	if (!shoppingList) {
+		return res.status(404).json({
+			message: "Shopping list not found",
+			requestedId: shoppingListId,
+		});
+	}
+
+	// Check if the user has permission to access the shopping list
+	if (
+		shoppingList.owner !== userId &&
+		!shoppingList.memberList.includes(userId)
+	) {
+		return res.status(403).json({
+			error: "Authorization Error",
+			message: "You are not authorized to perform this action.",
+		});
+	}
+
+	req.shoppingList = shoppingList; // Pass the shopping list to the next middleware
+	next();
+};
+
+module.exports = { authorizeOwner, authorizeAccess, authorizeOwnerArchived };
