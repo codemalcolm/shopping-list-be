@@ -29,7 +29,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId2",
 		name: "Party Supplies",
-		state: "inactive",
+		state: "archived",
 		owner: "userId201",
 		memberList: ["userId202", "userId203"],
 		itemList: [
@@ -98,7 +98,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId5",
 		name: "Camping Trip",
-		state: "inactive",
+		state: "archived",
 		owner: "userId501",
 		memberList: ["userId502", "userId503"],
 		itemList: [
@@ -190,7 +190,7 @@ const shoppingListsMock = [
 	{
 		id: "shoppingListId9",
 		name: "Office Supplies",
-		state: "inactive",
+		state: "archived",
 		owner: "userId901",
 		memberList: ["userId902"],
 		itemList: [
@@ -265,7 +265,7 @@ const getAllShoppingLists = asyncWrapper(async (req, res) => {
 	res
 		.status(201)
 		.json({
-			message: "Shopping list updated successfully.",
+			message: "Shopping list fetched successfully.",
 			fetchedLists: shoppingLists,
 		});
 });
