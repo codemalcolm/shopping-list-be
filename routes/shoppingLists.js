@@ -16,15 +16,31 @@ const {
 	deleteItem,
 } = require("../controllers/items");
 const {
-	createArchivedItem,
 	getArchivedItems,
 	deleteArchivedItem,
 } = require("../controllers/archived");
-const { inviteUser } = require("../controllers/inviteUser");
+const { addUser } = require("../controllers/inviteUser");
 
 // middleware
-const { validateShoppingList, validateShoppingListItem } = require("../middleware/validate");
-const { authorizeOwner, authorizeAccess } = require("../middleware/authorize");
+const {
+	validateShoppingList,
+	validateShoppingListItem,
+} = require("../middleware/validate");
+const { authorizeOwner, authorizeAccess, authorizeOwnerArchived } = require("../middleware/authorize");
+
+// Invite User
+router
+	.route("/:id/addUser/:userId") // shoppinglist/:id/inviteUser/post in uuDocsF
+	.post(authorizeOwner, addUser);
+
+// Archived
+router
+	.route("/archived")
+	.get(authorizeOwnerArchived, getArchivedItems); // shoppinglist/archived/get in uuDocs
+
+router
+	.route("/archived/:id")
+	.delete(authorizeOwner, deleteArchivedItem); // shoppinglist/archived/delete in uuDocs
 
 // Shopping lists
 router
@@ -41,27 +57,14 @@ router
 // Items
 
 router
-  .route("/:shoppingListId/item")
-  .post(authorizeAccess, validateShoppingListItem,createItem) // shoppinglist/item/create in uuDocs
-	.get(authorizeAccess, getItems); // shoppinglist/item/get in uuDocs
+	.route("/:shoppingListId/item")
+	.post(authorizeAccess, validateShoppingListItem, createItem) // shoppinglist/:shoppingListId/item/create in uuDocs
+	.get(authorizeAccess, getItems); // shoppinglist/:shoppingListId/item/create in uuDocs
 
 router
 	.route("/:shoppingListId/item/:id")
-	.put(authorizeAccess,validateShoppingListItem, editItem) // shoppinglist/item/edit in uuDocs
-	.delete(authorizeAccess, deleteItem) // shoppinglist/item/delete in uuDocs
+	.put(authorizeAccess, validateShoppingListItem, editItem) // shoppinglist/:shoppingListId/item/:id/edit in uuDocs
+	.delete(authorizeAccess, deleteItem); // shoppinglist/:shoppingListId/item/:id/delete in uuDocs
 
-
-// Archived
-router
-	.route("/archived")
-	.post(authorizeOwner, createArchivedItem) // shoppinglist/archived/create in uuDocs
-	.get(authorizeOwner, getArchivedItems); // shoppinglist/archived/get in uuDocs
-
-router.route("/archived/:id").delete(authorizeOwner, deleteArchivedItem); // shoppinglist/archived/delete in uuDocs
-
-// Invite User
-router
-	.route("/:id/inviteUser/:userId") // shoppinglist/:id/inviteUser/post in uuDocs
-	.post(authorizeOwner, inviteUser);
 
 module.exports = router;
