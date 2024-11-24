@@ -30,7 +30,7 @@ const { authorizeOwner, authorizeAccess, authorizeOwnerArchived } = require("../
 
 // Invite User
 router
-	.route("/:id/addUser/:userId") // shoppinglist/:id/inviteUser/post in uuDocsF
+	.route("/:id/addUser/:userId") // shoppinglist/:id/addUser/:userId in uuDocs
 	.post(authorizeOwner, addUser);
 
 // Archived
@@ -40,7 +40,7 @@ router
 
 router
 	.route("/archived/:id")
-	.delete(authorizeOwner, deleteArchivedItem); // shoppinglist/archived/delete in uuDocs
+	.delete(authorizeOwner, deleteArchivedItem); // shoppinglist/archived/:id/delete in uuDocs
 
 // Shopping lists
 router
@@ -59,7 +59,7 @@ router
 router
 	.route("/:shoppingListId/item")
 	.post(authorizeAccess, validateShoppingListItem, createItem) // shoppinglist/:shoppingListId/item/create in uuDocs
-	.get(authorizeAccess, getItems); // shoppinglist/:shoppingListId/item/create in uuDocs
+	.get(authorizeAccess, getItems); // shoppinglist/:shoppingListId/item/get in uuDocs
 
 router
 	.route("/:shoppingListId/item/:id")
