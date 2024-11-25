@@ -19,3 +19,4 @@ const ShoppingListItemSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("ShoppingListItem", ShoppingListItemSchema)
+module.exports = ShoppingListItemSchema
