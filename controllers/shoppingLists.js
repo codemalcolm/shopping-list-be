@@ -1,4 +1,5 @@
 const asyncWrapper = require("../middleware/async");
+const ShoppingList = require("../models/ShoppingList")
 
 // SHOPPING LISTS
 
@@ -238,21 +239,23 @@ const shoppingListsMock = [
 const createShoppingList = asyncWrapper(async (req, res) => {
 	const { name, owner, memberList, itemList } = req.body;
 
-	const processedItems = itemList.map((item) => ({
-		...item,
-		isDone: item.isDone || false, // Setting isDone to false if not provided
-	}));
+	const shoppingList = await ShoppingList.create(req.body)
 
-	const shoppingList = {
-        id: `shoppingListId${Math.floor(Math.random() * 1000)}`,
-		name,
-		state: "active", // Default value
-		owner,
-		memberList,
-		itemList: processedItems ? processedItems : [],
-		isDone: false, // Default value
-		isArchived: false, // Default value
-	};
+	// const processedItems = itemList.map((item) => ({
+	// 	...item,
+	// 	isDone: item.isDone || false, // Setting isDone to false if not provided
+	// }));
+
+	// const shoppingList = {
+    //     id: `shoppingListId${Math.floor(Math.random() * 1000)}`,
+	// 	name,
+	// 	state: "active", // Default value
+	// 	owner,
+	// 	memberList,
+	// 	itemList: processedItems ? processedItems : [],
+	// 	isDone: false, // Default value
+	// 	isArchived: false, // Default value
+	// };
 
 	res.status(201).json({
 		message: "Shopping list created successfully",
