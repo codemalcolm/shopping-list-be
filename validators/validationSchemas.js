@@ -19,7 +19,7 @@ const shoppingListValidationSchema = Joi.object({
         "string.max": "Shopping list name can't be more than 30 characters",
     }),
     state: Joi.string().valid("active", "archived").default("active"),
-    owner: Joi.string(),
+    owner: Joi.string().valid(""),
     memberList: Joi.array().items(Joi.string()),                    // Array of member IDs
     itemList: Joi.array().items(shoppingListItemValidationSchema), // Array of validated shopping list items
     isDone: Joi.boolean().default(false),
