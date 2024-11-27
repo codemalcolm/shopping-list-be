@@ -267,7 +267,8 @@ const createShoppingList = asyncWrapper(async (req, res) => {
 const getAllShoppingLists = asyncWrapper(async (req, res) => {
 	const userId = req.user.id
 
-
+	const shoppingLists = await ShoppingList.find({$or: [{owner: userId}, {memberList: userId}]}).exec();
+	console.log(shoppingLists)
 	res
 		.status(201)
 		.json({
