@@ -26,7 +26,7 @@ const {
 	validateShoppingList,
 	validateShoppingListItem,
 } = require("../middleware/validate");
-const { authorizeOwner, authorizeAccess, authorizeOwnerArchived } = require("../middleware/authorize");
+const { authorizeOwner, authorizeAccess, authorizeOwnerArchived,loggedUser } = require("../middleware/authorize");
 
 // Invite User
 router
@@ -45,8 +45,8 @@ router
 // Shopping lists
 router
 	.route("/")
-	.post(validateShoppingList, createShoppingList) // shopppinglist/create in uuDocs
-	.get(getAllShoppingLists); // shopppinglist/get in uuDocs
+	.post(loggedUser, validateShoppingList, createShoppingList,) // shopppinglist/create in uuDocs
+	.get(loggedUser, getAllShoppingLists); // shopppinglist/get in uuDocs
 
 router
 	.route("/:id")
