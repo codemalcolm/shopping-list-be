@@ -1,3 +1,5 @@
+const ShoppingList = require("../models/ShoppingList");
+
 const shoppingListsMock = [
 	{
 		id: "shoppingListId1",
@@ -231,17 +233,17 @@ const shoppingListsMock = [
 	},
 ];
 
-const authorizeOwner = (req, res, next) => {
+const authorizeOwner = async(req, res, next) => {
 	const userId = "userId1001"; // Mocking id for simplification (JWT token would be accessed here)
 	const listId = req.params.id;
 
-	const shoppingList = shoppingListsMock.find((list) => list.id === listId);
+	const shoppingList = await ShoppingList.findById({ _id: listId });
 
 	// shopping list doesn't exist
 	if (!shoppingList) {
 		return res
 			.status(404)
-			.json({ message: "Shopping list not found", requestedId: listId });
+			.json({ message: "Shopping list not fousdasdnd", requestedId: listId });
 	}
 	// unauthorized user is trying to access endpoints where he doesn't have permissions
 	if (shoppingList.owner !== userId) {
@@ -270,25 +272,27 @@ const authorizeOwnerArchived = (req, res, next) => {
 	next();
 };
 
-const authorizeAccess = (req, res, next) => {
-	const userId = "userId102"; // Mock user ID for now
-	let { shoppingListId } = req.params;
+const authorizeAccess = async(req, res, next) => {
+	const userId = "userId1001"; // Mock user ID for now
+	let { listId } = req.params.id;
+
+
 
 	// if shoppingListId is undefined that means that the shoppinglist/:id is being used instead
-	if (shoppingListId === undefined) {
-		shoppingListId = req.params.id; // so we change it here
+	if (listId === undefined) {
+		listId = req.params.id; // so we change it here
 	}
-
+	listId = listId.trim();
+	console.log(listId)
 	// Find the shopping list by ID
-	const shoppingList = shoppingListsMock.find(
-		(list) => list.id === shoppingListId
-	);
+	const shoppingList = await ShoppingList.findById({ _id: listId });
+
 
 	// If shopping list doesn't exist
 	if (!shoppingList) {
 		return res.status(404).json({
-			message: "Shopping list not found",
-			requestedId: shoppingListId,
+			message: "Shopping list nots found",
+			requestedId: listId,
 		});
 	}
 
