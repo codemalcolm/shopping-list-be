@@ -237,25 +237,26 @@ const shoppingListsMock = [
 ];
 
 const createShoppingList = asyncWrapper(async (req, res) => {
+	const userId = req.user.id
+	console.log(req.user)
 	const { name, owner, memberList, itemList } = req.body;
 
-	const shoppingList = await ShoppingList.create(req.body)
+	const processedItems = itemList.map((item) => ({
+		...item,
+		isDone: item.isDone || false, // Setting isDone to false if not provided
+	}));
 
-	// const processedItems = itemList.map((item) => ({
-	// 	...item,
-	// 	isDone: item.isDone || false, // Setting isDone to false if not provided
-	// }));
+	const shoppingListObj = {
+		name,
+		state: "active", // Default value
+		owner: userId,
+		memberList,
+		itemList: processedItems ? processedItems : [],
+		isDone: false, // Default value
+		isArchived: false, // Default value
+	};
 
-	// const shoppingList = {
-    //     id: `shoppingListId${Math.floor(Math.random() * 1000)}`,
-	// 	name,
-	// 	state: "active", // Default value
-	// 	owner,
-	// 	memberList,
-	// 	itemList: processedItems ? processedItems : [],
-	// 	isDone: false, // Default value
-	// 	isArchived: false, // Default value
-	// };
+	const shoppingList = await ShoppingList.create(shoppingListObj)
 
 	res.status(201).json({
 		message: "Shopping list created successfully",
@@ -264,7 +265,9 @@ const createShoppingList = asyncWrapper(async (req, res) => {
 });
 
 const getAllShoppingLists = asyncWrapper(async (req, res) => {
-	const shoppingLists = shoppingListsMock;
+	const userId = req.user.id
+
+
 	res
 		.status(201)
 		.json({
