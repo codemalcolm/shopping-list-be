@@ -307,4 +307,10 @@ const authorizeAccess = (req, res, next) => {
 	next();
 };
 
-module.exports = { authorizeOwner, authorizeAccess, authorizeOwnerArchived };
+const loggedUser = (req, res, next) =>{
+	const userId = "userId1001"; // Mocking id for simplification (JWT token would be accessed here)
+	req.user = {id : userId}
+	next()
+}
+
+module.exports = { authorizeOwner, authorizeAccess, authorizeOwnerArchived, loggedUser };
