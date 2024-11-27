@@ -60,19 +60,22 @@ const editShoppingList = asyncWrapper(async (req, res) => {
 });
 
 const deleteShoppingList = asyncWrapper(async (req, res) => {
+	let { id: listId } = req.params;
+	listId = listId.trim();
 
-	const { shoppingList } = req; // Access the shopping list from authorizeOwner middleware
+	const shoppingList = await ShoppingList.findOneAndDelete({_id: listId})
 
-	const index = shoppingListsMock.findIndex(
-		(list) => list.id === shoppingList.id
-	);
-
-	// Removing the shopping list from the mocked db (shoppingListsMock)
-	const [deletedList] = shoppingListsMock.splice(index, 1);
+	if(!shoppingList){
+		res.status(404).json({
+			message: "Couldn't find list",
+			requestedId: listId,
+		});
+		return
+	};
 
 	res.status(200).json({
 		message: "Shopping list deleted successfully.",
-		deletedDocument: deletedList,
+		deletedShoppingList: shoppingList
 	});
 });
 
