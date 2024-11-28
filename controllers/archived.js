@@ -251,23 +251,11 @@ const getArchivedItems = asyncWrapper(async (req, res) => {
 const deleteArchivedItem = asyncWrapper(async (req, res) => {
 	const { id } = req.params;
 
-	const archivedIndex = shoppingListsMock.findIndex(
-		(list) => list.id === id && list.state === "archived"
-	);
-
-	if (archivedIndex === -1) {
-		return res
-			.status(404)
-			.json({ message: "Shopping list not found", requestedId: listId 
-        });
-	}
-
-	// removing archived shopping list from the array
-	const deletedItem = shoppingListsMock.splice(archivedIndex, 1);
+	const deletedAchivedList = await ShoppingList.findOneAndDelete({_id : id},{state:"archived"})
 
 	res.status(200).json({
 		message: "Archived shopping list has been deleted",
-		deletedItem: deletedItem[0],
+		deletedItem: deletedAchivedList,
 	});
 });
 
