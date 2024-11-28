@@ -1,4 +1,5 @@
 const asyncWrapper = require("../middleware/async");
+const ShoppingList = require("../models/ShoppingList");
 
 const shoppingListsMock = [
 	{
@@ -235,11 +236,10 @@ const shoppingListsMock = [
 
 const getArchivedItems = asyncWrapper(async (req, res) => {
 	const userId = req.user.id;
+	console.log(userId)
 
 	// filtering archived shopping lists where the user is the owner
-	const archivedLists = shoppingListsMock.filter(
-		(list) => list.owner === userId && list.state === "archived"
-	);
+	const archivedLists = await ShoppingList.find({owner : userId, state:"archived"})
 
 	res.status(200).json({
 		message: "Archived shoppinglists fetched successfully",
