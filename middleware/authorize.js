@@ -243,7 +243,7 @@ const authorizeOwner = async(req, res, next) => {
 	if (!shoppingList) {
 		return res
 			.status(404)
-			.json({ message: "Shopping list not fousdasdnd", requestedId: listId });
+			.json({ message: "Shopping list not found", requestedId: listId });
 	}
 	// unauthorized user is trying to access endpoints where he doesn't have permissions
 	if (shoppingList.owner !== userId) {
@@ -274,16 +274,17 @@ const authorizeOwnerArchived = (req, res, next) => {
 
 const authorizeAccess = async(req, res, next) => {
 	const userId = "userId1001"; // Mock user ID for now
-	let { listId } = req.params.id;
-
-
+	let { listId } = req.params;
 
 	// if shoppingListId is undefined that means that the shoppinglist/:id is being used instead
 	if (listId === undefined) {
 		listId = req.params.id; // so we change it here
 	}
-	listId = listId.trim();
-	console.log(listId)
+
+	if(listId || listId !== undefined){
+		listId = listId.trim()
+	}
+
 	// Find the shopping list by ID
 	const shoppingList = await ShoppingList.findById({ _id: listId });
 
@@ -291,7 +292,7 @@ const authorizeAccess = async(req, res, next) => {
 	// If shopping list doesn't exist
 	if (!shoppingList) {
 		return res.status(404).json({
-			message: "Shopping list nots found",
+			message: "Shopping list not found",
 			requestedId: listId,
 		});
 	}
