@@ -48,10 +48,14 @@ const editShoppingList = asyncWrapper(async (req, res) => {
 	let { id: listId } = req.params;
 	listId = listId.trim();
 
-	const shoppingList = await ShoppingList.findOneAndUpdate({ _id: listId }, req.body, {
-		new: true,
-		runValidators: true,
-	});
+	const shoppingList = await ShoppingList.findOneAndUpdate(
+		{ _id: listId },
+		req.body,
+		{
+			new: true,
+			runValidators: true,
+		}
+	);
 
 	res.status(200).json({
 		message: "Shopping list updated successfully.",
@@ -63,19 +67,19 @@ const deleteShoppingList = asyncWrapper(async (req, res) => {
 	let { id: listId } = req.params;
 	listId = listId.trim();
 
-	const shoppingList = await ShoppingList.findOneAndDelete({_id: listId})
+	const shoppingList = await ShoppingList.findOneAndDelete({ _id: listId });
 
-	if(!shoppingList){
+	if (!shoppingList) {
 		res.status(404).json({
 			message: "Couldn't find list",
 			requestedId: listId,
 		});
-		return
-	};
+		return;
+	}
 
 	res.status(200).json({
 		message: "Shopping list deleted successfully.",
-		deletedShoppingList: shoppingList
+		deletedShoppingList: shoppingList,
 	});
 });
 
@@ -87,7 +91,7 @@ const getSingleShoppingList = asyncWrapper(async (req, res) => {
 	!singleList
 		? res
 				.status(404)
-				.json({ message: "Shopping list snot found", requestedId: listId })
+				.json({ message: "Shopping list not found", requestedId: listId })
 		: res.status(201).json({
 				message: "Shopping list fetched successfully",
 				fetchedDocument: singleList,
