@@ -55,25 +55,25 @@ const editItem = asyncWrapper(async (req, res) => {
 	const { listId } = req.params;
 	const { id } = req.params;
 
-  const {name, quantity, isDone} = req.body
-  const updatedFields = {
-    name,
-    quantity,
-    isDone,
-  }
-  console.log(updatedFields)
+	const { name, quantity, isDone } = req.body;
+	const updatedFields = {
+		name,
+		quantity,
+		isDone,
+	};
+	console.log(updatedFields);
 
 	// Find the item to edit
 	const updatedItemList = await ShoppingList.findOneAndUpdate(
 		{ _id: listId, "itemList._id": id },
-		{ $set:
-      { 
-      "itemList.$.name": updatedFields.name,
-      "itemList.$.quantity": updatedFields.quantity,
-      "itemList.$.isDone": updatedFields.isDone,
-      } 
-    },
-    { new: true, runValidators: true }
+		{
+			$set: {
+				"itemList.$.name": updatedFields.name,
+				"itemList.$.quantity": updatedFields.quantity,
+				"itemList.$.isDone": updatedFields.isDone,
+			},
+		},
+		{ new: true, runValidators: true }
 	);
 
 	if (!updatedItemList) {
@@ -89,28 +89,21 @@ const editItem = asyncWrapper(async (req, res) => {
 	});
 });
 
-
-
 const deleteItem = asyncWrapper(async (req, res) => {
-	const { shoppingList } = req; // Access the shopping list from authorizeOwner middleware
+	const { listId } = req.params;
 	const { id } = req.params;
+  let deletedItem = null
 
-	// Find the index of the item to delete
-	const itemIndex = shoppingList.itemList.findIndex((item) => item.id === id);
-
-	if (itemIndex === -1) {
-		return res.status(404).json({
-			message: "Item not found",
-			requestedId: id,
-		});
-	}
-
-	const deletedItem = shoppingList.itemList.splice(itemIndex, 1);
+	// Find the shopping list and the item to delete
+	await ShoppingList.findOneAndUpdate(
+		{ _id: listId },
+		deletedItem = { $pull: { itemList: { _id: id } } },
+		{ new: true }
+	);
 
 	res.status(200).json({
 		message: "Item deleted successfully",
-		data: deletedItem[0],
-		updatedShoppingList: shoppingList,
+    deletedItem:deletedItem
 	});
 });
 
