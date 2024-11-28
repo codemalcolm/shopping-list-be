@@ -57,12 +57,12 @@ router
 // Items
 
 router
-	.route("/:shoppingListId/item")
+	.route("/:listId/item")
 	.post(authorizeAccess, validateShoppingListItem, createItem) // shoppinglist/:shoppingListId/item/create in uuDocs
 	.get(authorizeAccess, getItems); // shoppinglist/:shoppingListId/item/get in uuDocs
 
 router
-	.route("/:shoppingListId/item/:id")
+	.route("/:listId/item/:id")
 	.put(authorizeAccess, validateShoppingListItem, editItem) // shoppinglist/:shoppingListId/item/:id/edit in uuDocs
 	.delete(authorizeAccess, deleteItem); // shoppinglist/:shoppingListId/item/:id/delete in uuDocs
 
