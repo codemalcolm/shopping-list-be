@@ -38,6 +38,14 @@ const getAllShoppingLists = asyncWrapper(async (req, res) => {
 		$or: [{ owner: userId }, { memberList: userId }],
 	}).exec();
 
+	if(!shoppingLists){
+		res.status(404).json({
+			message: "No shopping list found",
+			requestedId: userId
+		});
+		return;
+	}
+
 	res.status(201).json({
 		message: "Shopping list fetched successfully.",
 		fetchedLists: shoppingLists,
