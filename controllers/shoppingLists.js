@@ -93,7 +93,6 @@ const deleteShoppingList = asyncWrapper(async (req, res) => {
 
 const getSingleShoppingList = asyncWrapper(async (req, res) => {
 	let { id: listId } = req.params;
-	listId = listId.trim();
 	const singleList = await ShoppingList.findById({ _id: listId });
 
 	!singleList
