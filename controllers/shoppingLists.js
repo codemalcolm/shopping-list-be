@@ -79,7 +79,7 @@ const deleteShoppingList = asyncWrapper(async (req, res) => {
 
 	if (!shoppingList) {
 		res.status(404).json({
-			message: "Couldn't find list",
+			message: "No shopping list found",
 			requestedId: listId,
 		});
 		return;
