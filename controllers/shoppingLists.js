@@ -5,7 +5,6 @@ const ShoppingList = require("../models/ShoppingList");
 
 const createShoppingList = asyncWrapper(async (req, res) => {
 	const userId = req.user.id;
-	console.log(req.user);
 	const { name, owner, memberList, itemList } = req.body;
 
 	const processedItems = itemList.map((item) => ({

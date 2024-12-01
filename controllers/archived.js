@@ -236,7 +236,6 @@ const shoppingListsMock = [
 
 const getArchivedItems = asyncWrapper(async (req, res) => {
 	const userId = req.user.id;
-	console.log(userId)
 
 	// filtering archived shopping lists where the user is the owner
 	const archivedLists = await ShoppingList.find({owner : userId, state:"archived"})

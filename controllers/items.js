@@ -61,7 +61,6 @@ const editItem = asyncWrapper(async (req, res) => {
 		quantity,
 		isDone,
 	};
-	console.log(updatedFields);
 
 	// Find the item to edit
 	const updatedItemList = await ShoppingList.findOneAndUpdate(
